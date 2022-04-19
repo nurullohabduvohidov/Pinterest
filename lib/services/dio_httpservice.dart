@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/foundation.dart';
 
 class DioNetwork{
   static String BASE_URL ="https://api.unsplash.com";
@@ -29,7 +30,9 @@ static Future<String?> GET(String api,Map<String,dynamic>? params) async {
     receiveTimeout: 3000,
   );
   Response response = await Dio(options).get(api,queryParameters: params);
-  print(jsonEncode(response.data));
+  if (kDebugMode) {
+    print(jsonEncode(response.data));
+  }
   if(response.statusCode == 200) return jsonEncode(response.data);
   return null;
 }

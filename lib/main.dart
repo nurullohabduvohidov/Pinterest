@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:pinterest/pages/comment_page.dart';
-import 'package:pinterest/pages/home_page.dart';
-import 'package:pinterest/pages/intro_page.dart';
-import 'package:pinterest/pages/page_controller.dart';
-import 'package:pinterest/pages/profile_page.dart';
-import 'package:pinterest/pages/search_page.dart';
+import 'package:get/get.dart';
+import 'pages/comment_page.dart';
+import 'pages/home_page.dart';
+import 'pages/page_controller.dart';
+import 'pages/profile_page.dart';
+import 'pages/search_page.dart';
+import 'services/di_service.dart';
 
-void main() {
+Future<void> main()async {
+  await DIService.init();
   runApp(const MyApp());
 }
 
@@ -16,19 +18,19 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
       home: PageControllerPage(),
-      routes: {
-        HomePage.id : (context) => HomePage(),
-        CommentPage.id : (context) => CommentPage(),
-        SearchPage.id : (context) => SearchPage(),
-        ProfilePage.id : (context) => ProfilePage(),
-      },
+      getPages: [
+        GetPage(name: "/HomePage", page: () => const HomePage()),
+        GetPage(name: "/CommentPage", page: () => const CommentPage()),
+        GetPage(name: "/SearchPage", page: () => const SearchPage()),
+        GetPage(name: "/ProfilePage", page: () => const ProfilePage()),
+      ],
     );
   }
 }
