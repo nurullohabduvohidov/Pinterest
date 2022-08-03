@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
-import 'package:pinterest/controller/pagecontroller.dart';
+import 'package:pinterest/controller/main_page_controller.dart';
 import 'package:pinterest/pages/comment_page.dart';
 import 'package:pinterest/pages/home_page.dart';
 import 'package:pinterest/pages/profile_page.dart';
@@ -11,35 +11,28 @@ import 'search_page.dart';
 
 
 
-class PageControllerPage extends StatefulWidget {
-  const PageControllerPage({Key? key}) : super(key: key);
+class MainPage extends StatelessWidget {
+  const MainPage({Key? key}) : super(key: key);
 
-  @override
-  _PageControllerPageState createState() => _PageControllerPageState();
-}
 
-class _PageControllerPageState extends State<PageControllerPage> {
-  final getFind = Get.find<PageControll>();
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
-        init: PageControll(),
-        builder: (controller) {
+        init: MainPageController(),
+        builder: (MainPageController controller) {
           return Scaffold(
             resizeToAvoidBottomInset: false,
-            body: (getFind.connectionStatus == ConnectivityResult.none)
+            body: (controller.connectionStatus == ConnectivityResult.none)
                 ? Center(
-              child: Lottie.asset('assets/nointernet.json',
+              child: Lottie.asset('assets/animation/no_internet.json',
                 width: 180,),
             )
                 : PageView(
               physics: NeverScrollableScrollPhysics(),
-              controller: getFind.controller,
+              controller: controller.controller,
               onPageChanged: (index) {
-                setState(() {
-                  getFind.changeIndex = index;
-                });
+                 controller.functionChangeIndex(index);
               },
               children: const [
                 HomePage(),
@@ -59,13 +52,11 @@ class _PageControllerPageState extends State<PageControllerPage> {
               ),
               child: BottomNavigationBar(
                 selectedItemColor: Colors.black,
-                currentIndex: getFind.changeIndex,
+                currentIndex: controller.changeIndex,
                 backgroundColor: Colors.transparent,
                 elevation: 0,
                 onTap: (int index) {
-                  getFind.changeIndex = index;
-                  getFind.controller.jumpToPage(index);
-                  getFind.update();
+                controller.changePageControllerIndex(index);
                 },
                 showSelectedLabels: false,
                 showUnselectedLabels: false,

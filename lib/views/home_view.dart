@@ -73,9 +73,6 @@ Padding buildPadding(BuildContext context,int index,final getFind) {
                         "Image downloaded!",
                         borderRadius: BorderRadius.circular(25.0),
                       ),
-                      additionalTopPadding: 30,
-                      displayDuration: const Duration(milliseconds: 800),
-                      hideOutAnimationDuration: const Duration(milliseconds: 400),
                     );
                   },
                 ),

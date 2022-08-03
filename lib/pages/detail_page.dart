@@ -4,14 +4,14 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:pinterest/controller/detail_controller.dart';
 import 'package:pinterest/models/pinterest.dart';
-import 'package:pinterest/views/search_view.dart';
+import 'package:pinterest/widgets/search_widget.dart';
 
 class DetailPage extends StatefulWidget {
-  static String id = "DetailPage";
-  String pinterestPhoto;
-  Pinterest pinterest;
+  static const String id = "DetailPage";
+  final String pinterestPhoto;
+  final Pinterest pinterest;
 
-  DetailPage({Key? key, required this.pinterestPhoto, required this.pinterest})
+  const DetailPage({Key? key, required this.pinterestPhoto, required this.pinterest})
       : super(key: key);
 
   @override
@@ -19,7 +19,7 @@ class DetailPage extends StatefulWidget {
 }
 
 class _DetailPageState extends State<DetailPage> {
-  final getFind = Get.find<DetailController>();
+
 
   @override
   Widget build(BuildContext context) {
@@ -242,7 +242,7 @@ class _DetailPageState extends State<DetailPage> {
                                     fontSize: 15,
                                     fontWeight: FontWeight.bold),
                               ),
-                              buildPaddingMasonry(getFind),
+                              SearchWidget(searchController: controller,),
                             ],
                           ),
                         )

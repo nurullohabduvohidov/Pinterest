@@ -6,8 +6,8 @@ import 'package:get/get.dart';
 import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:pinterest/models/pinterest.dart';
-import 'package:pinterest/services/dio_httpservice.dart';
 import 'package:pinterest/services/pinterest_service.dart';
+import 'package:pinterest/utils/classess.dart';
 
 class HomeController extends GetxController{
   bool isLoadMore = false;
@@ -24,7 +24,7 @@ class HomeController extends GetxController{
 
 
   void dioGet(){
-    DioNetwork.GET(DioNetwork.API_PHOTO_LIST, DioNetwork.paramEmpty()).then((response) => {});
+    PinterestHttp.GET(PinterestHttp.API_PHOTO_LIST, PinterestHttp.paramEmpty()).then((response) => {});
   }
 
 
@@ -110,6 +110,15 @@ class HomeController extends GetxController{
       update(),
     });
   }
+
+  void searchFunction(int index){
+    pinterestList.clear();
+    searchText = UtilClass.text[index];
+    searchCategory(UtilClass.text[index]);
+    selected = index;
+    update();
+  }
+
 
   @override
   void dispose() {

@@ -3,19 +3,15 @@ import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:pinterest/controller/search_controller.dart';
 import 'package:pinterest/views/search_view.dart';
+import 'package:pinterest/widgets/search_widget.dart';
 
 
 
-class SearchPage extends StatefulWidget {
+class SearchPage extends StatelessWidget {
   static String id = "SearchPage";
   const SearchPage({Key? key}) : super(key: key);
 
-  @override
-  _SearchPageState createState() => _SearchPageState();
-}
 
-class _SearchPageState extends State<SearchPage> {
- final getFind = Get.find<SearchController>();
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -23,25 +19,24 @@ class _SearchPageState extends State<SearchPage> {
         builder: (SearchController controller) => Scaffold(
           resizeToAvoidBottomInset: false,
           backgroundColor: Colors.white,
-          appBar: buildAppBar(getFind),
-          body: (getFind.pinterestList.isNotEmpty) ?
+          appBar: buildAppBar(controller),
+          body: (controller.pinterestList.isNotEmpty) ?
           Stack(
             children: [
               NotificationListener<ScrollNotification>(
                 onNotification: (ScrollNotification scrollInfo){
-                  if(!getFind.isLoadMore && scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent){
-                    getFind.searchCategory(getFind.textEditingController.text);
-                    setState(() {});
+                  if(!controller.isLoadMore && scrollInfo.metrics.pixels == scrollInfo.metrics.maxScrollExtent){
+                    controller.searchCategory(controller.textEditingController.text);
                   }
                   return true;
                 },
 
 
-                child:buildPaddingMasonry(getFind)
+                child:SearchWidget(searchController: controller,),
               ),
             ],
           ) : Center(
-            child:Lottie.asset("assets/animation/searching.json",height: 200,width: 200) //Icon(Icons.search,color: Colors.black,),
+            child:Lottie.asset("assets/animation/searching.json",height: 200.0,width: 200.0),
           ),
         )
     );

@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 
-class PageControll extends GetxController{
+class MainPageController extends GetxController{
   int changeIndex = 0;
   bool isOffline = false;
   PageController controller = PageController();
@@ -45,9 +45,20 @@ class PageControll extends GetxController{
       update();
     }
   }
+
+  void functionChangeIndex(int index){
+    changeIndex = index;
+    update();
+  }
+
+
+  void changePageControllerIndex(int index) {
+    changeIndex = index;
+    controller.jumpToPage(index);
+    update();
+  }
 @override
   void onInit() {
-    // TODO: implement onInit
     super.onInit();
     initConnectivity();
     controller =PageController();
@@ -55,7 +66,6 @@ class PageControll extends GetxController{
   }
  @override
   void onClose() {
-    // TODO: implement onClose
     super.onClose();
     controller.dispose();
     _connectivitySubscription.cancel();

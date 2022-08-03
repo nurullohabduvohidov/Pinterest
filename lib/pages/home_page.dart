@@ -9,17 +9,12 @@ import 'package:pinterest/pages/detail_page.dart';
 import 'package:pinterest/utils/classess.dart';
 import 'package:pinterest/views/home_view.dart';
 
-class HomePage extends StatefulWidget {
-  static String id = "HomePage";
+class HomePage extends StatelessWidget {
+  static const String id = "HomePage";
 
   const HomePage({Key? key}) : super(key: key);
 
-  @override
-  _HomePageState createState() => _HomePageState();
-}
 
-class _HomePageState extends State<HomePage> {
-  final getFind = Get.find<HomeController>();
   @override
   Widget build(BuildContext context) {
     return GetBuilder(
@@ -42,17 +37,13 @@ class _HomePageState extends State<HomePage> {
                     itemBuilder: (context, index) {
                       return GestureDetector(
                         onTap: () {
-                          getFind.pinterestList.clear();
-                          getFind.searchText = UtilClass.text[index];
-                          getFind.searchCategory(UtilClass.text[index]);
-                          getFind.selected = index;
-                          getFind.update();
+                          controller.searchFunction(index);
                         },
                         child: Container(
                           margin: EdgeInsets.only(left: 10),
                           alignment: Alignment.center,
                           decoration: BoxDecoration(
-                            color: getFind.selected == index ? Colors.black : Colors.white,
+                            color: controller.selected == index ? Colors.black : Colors.white,
                             borderRadius: BorderRadius.circular(25),
                           ),
                           child: Padding(
@@ -62,7 +53,7 @@ class _HomePageState extends State<HomePage> {
                               style: TextStyle(
                                   fontSize: 16,
                                   fontWeight: FontWeight.normal,
-                                  color: getFind.selected == index
+                                  color: controller.selected == index
                                       ? Colors.white
                                       : Colors.black),
                             ),
@@ -75,7 +66,7 @@ class _HomePageState extends State<HomePage> {
               ),
             ),
           ),
-          body: getFind.isLoading
+          body: controller.isLoading
               ? Center(
             child: CircularProgressIndicator.adaptive(
               valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
@@ -85,11 +76,10 @@ class _HomePageState extends State<HomePage> {
             children: [
               NotificationListener<ScrollNotification>(
                 onNotification: (ScrollNotification scrollInfo) {
-                  if (!getFind.isLoadMore &&
+                  if (!controller.isLoadMore &&
                       scrollInfo.metrics.pixels ==
                           scrollInfo.metrics.maxScrollExtent) {
-                    getFind.searchCategory(getFind.searchText);
-                    getFind.update();
+                    controller.searchCategory(controller.searchText);
                   }
                   return true;
                 },
@@ -97,12 +87,12 @@ class _HomePageState extends State<HomePage> {
                   padding: const EdgeInsets.symmetric(horizontal: 8),
                   child: MasonryGridView.builder(
                     shrinkWrap: true,
-                    controller:getFind.scrollController,
+                    controller:controller.scrollController,
                     gridDelegate:
                     const SliverSimpleGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                     ),
-                    itemCount: getFind.pinterestList.length,
+                    itemCount: controller.pinterestList.length,
                     crossAxisSpacing: 10,
                     mainAxisSpacing: 10,
                     itemBuilder: (context, index) {
@@ -117,14 +107,13 @@ class _HomePageState extends State<HomePage> {
                                 child: CachedNetworkImage(
                                   placeholder: (context, url) =>
                                       Image.asset("assets/images/notFound.jpg"),
-                                  imageUrl: getFind.pinterestList[index].urls!.regular!,
+                                  imageUrl: controller.pinterestList[index].urls!.regular!,
                                   errorWidget: (context, url, error) =>
                                       Image.asset("assets/images/notFound.jpg"),
                                 )),
                             onTap: (){
-                              getFind.imagesPinterest = getFind.pinterestList[index].urls!.regular!;
-                              Get.to(DetailPage(pinterestPhoto: getFind.imagesPinterest, pinterest: getFind.pinterestList[index],));
-                             // Navigator.of(context).push(MaterialPageRoute(builder: (context)=> DetailPage(pinterestPhoto: getFind.imagesPinterest, pinterest: getFind.pinterestList[index],)));
+                              controller.imagesPinterest = controller.pinterestList[index].urls!.regular!;
+                              Get.to(DetailPage(pinterestPhoto: controller.imagesPinterest, pinterest: controller.pinterestList[index],));
                             },
                           ),
                           SizedBox(
@@ -135,11 +124,11 @@ class _HomePageState extends State<HomePage> {
                             children: [
                               Row(
                                 children: [
-                                  getFind.pinterestList[index].description != null
+                                  controller.pinterestList[index].description != null
                                       ? SizedBox(
                                       width: 140,
                                       child: Text(
-                                        getFind.pinterestList[index].description!,
+                                        controller.pinterestList[index].description!,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                       ))
@@ -152,7 +141,7 @@ class _HomePageState extends State<HomePage> {
                                         image: DecorationImage(
                                             fit: BoxFit.cover,
                                             image: NetworkImage(
-                                                getFind.pinterestList[index]
+                                                controller.pinterestList[index]
                                                     .urls!
                                                     .regular!))),
                                   )
@@ -163,7 +152,7 @@ class _HomePageState extends State<HomePage> {
                                     showMaterialModalBottomSheet(
                                       context: context,
                                       builder: (BuildContext context) =>
-                                          buildPadding(context,index,getFind),
+                                          buildPadding(context,index,controller),
                                     );
                                   },
                                   child: Icon(
@@ -178,7 +167,7 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-              getFind.isLoadMore ? Center(
+              controller.isLoadMore ? Center(
                 child: CircleAvatar(
                   backgroundColor: Colors.grey,
                   child: Lottie.asset("assets/animation/lotti.json",width: 30,height: 30),
